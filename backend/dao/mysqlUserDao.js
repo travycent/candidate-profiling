@@ -18,36 +18,102 @@ class MySQLUserDAO extends UserDAO{
         const query = "SELECT * FROM candidates";
         const [results] = await connection.query(query);
         return results;
-      }
-
-    getByCandidateId(id){
-        const query = "SELECT * FROM candidates WHERE candidate_id = ?";
-        return new Promise((resolve,reject) =>{
-            connection.query(query,[id],(err,results) =>{
-                if(err){
-                    return reject(err);
-                }
-                if (results.length === 0) {
-                    return resolve([]);
-                }
-                resolve(results[0])
-            });
-        });
     }
 
-    getByCandidateEmail(email){
+    /**
+     * This function asynchronsly retrievs the candidates data by implementing
+     * getCandidatesId method
+     * @param {id} -- User ID
+     * @returns {results<object[]>} which resolves to an array of candidates
+     */
+    async getByCandidateId(id) {
+        const query = "SELECT * FROM candidates WHERE candidate_id = ?";
+        const [results] = await connection.query(query, [id]);
+        return results.length ? results[0] : null;
+    }
+ 
+    /**
+     * This function asynchronsly retrievs the candidates data by implementing
+     * getCandidatesId method
+     * @param {id} -- User ID
+     * @returns {results<object[]>} which resolves to an array of candidates
+     */
+    async getByCandidateEmail(email){
         const query = "SELECT * FROM candidates WHERE candidate_email = ?";
-        return new Promise((resolve,reject) =>{
-            connection.query(query,[email],(err,results) =>{
-                if(err){
-                    return reject(err);
-                }
-                if (results.length === 0) {
-                    return resolve([]);
-                }
-                resolve(results[0])
-            });
-        });
+        const [results] = await connection.query(query, [email]);
+        return results.length ? results[0] : null;
+    }
+
+    /**
+     * This function asynchronsly creates the candidates data by implementing
+     * createCandidate method
+     * Checks for required fields and retuns a 400 bad request response for missing values 
+     * @param {user} -- User object
+     * @returns {results<object[]>} which resolves to an array of candidates
+     */
+    async createCandidate(user) {
+        const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const { candidate_firstname,candidate_lastname, candidate_phone_number, candidate_email, time_interval, linkedin_profile, github_profile, text_comment } = user;
+        const query = 'INSERT INTO candidates (candidate_firstname, candidate_lastname, candidate_phone_number, candidate_email, time_interval, linkedin_profile, github_profile, text_comment, create_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const [result] = await connection.query(query, [candidate_firstname, candidate_lastname, candidate_phone_number, candidate_email, time_interval, linkedin_profile, github_profile, text_comment, currentDate]);
+        return { id: result.insertId, ...user };
+    }
+
+    /**
+     * This function asynchronsly updates the candidates data by implementing
+     * updateCandidateByEmail method
+     * Checks for required fields and retuns a 400 bad request response for missing values 
+     * @param {user} -- User object
+     * @returns {results<object[]>} which resolves to an array of candidates
+     */
+    async updateCandidateByEmail(email, user) {
+        const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        // Check for required fields and ensure they are not empty
+        const {
+          candidate_firstname,
+          candidate_lastname,
+          candidate_phone_number,
+          time_interval,
+          linkedin_profile,
+          github_profile,
+          text_comment
+        } = user;
+    
+        // Construct the query
+        const query = `
+          UPDATE candidates SET 
+            candidate_firstname = ?, 
+            candidate_lastname = ?, 
+            candidate_phone_number = ?, 
+            time_interval = ?, 
+            linkedin_profile = ?, 
+            github_profile = ?, 
+            text_comment = ?,
+            update_date = ?
+          WHERE candidate_email = ?
+        `;
+    
+        // Execute the query
+        const [result] = await connection.query(query, [
+          candidate_firstname,
+          candidate_lastname,
+          candidate_phone_number,
+          time_interval,
+          linkedin_profile,
+          github_profile,
+          text_comment,
+          currentDate,
+          email
+        ]);
+    
+        // Check if any rows were affected 
+        if (result.affectedRows === 0) {
+          throw new Error('No candidate found with the provided email.');
+        }
+    
+        // Return the updated candidate
+        return { ...user, candidate_email: email };
+      
     }
 
 }

@@ -24,12 +24,10 @@ class UserDAO {
         throw new Error('Method not implemented.');
       }
   
-    updateCandidate(id, user) {
+
+    updateCandidateByEmail(email, user) {
       throw new Error('Method not implemented.');
     }
-  
-    deleteCandidate(id) {
-      throw new Error('Method not implemented.');
-    }
+
   }
   export default UserDAO;
