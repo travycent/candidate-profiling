@@ -5,7 +5,6 @@ const base_url="http://127.0.0.1:3000/api/v1";
 export const fetchData = async (url) => {
     try {
       const response = await axios.get(base_url+url);
-      //console.log(response.data['data'])
       return response.data['data'];
     } catch (error) {
         console.error(error);
@@ -20,7 +19,7 @@ export const fetchData = async (url) => {
   };
 
   export const postData = async (url,post_data) => {
-    credentials=JSON.stringify(post_data)
+    post_data=JSON.stringify(post_data)
 
     try {
       const config = {
@@ -28,7 +27,7 @@ export const fetchData = async (url) => {
                 'Content-Type': 'application/json',
             }
         }
-      const response = await axios.post(base_url+url,credentials,config);
+      const response = await axios.post(base_url+url,post_data,config);
       console.log(response.data)
       return response.data;
     } catch (error) {
