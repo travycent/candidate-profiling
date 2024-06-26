@@ -22,8 +22,8 @@ export const setUserDAO = (dao) => {
  */
 export const getCandidates = (req,res) =>{
     userDAO.getCandidates()
-     .then(results => res.status(200).json(results))
-     .catch(err => res.status(500).json({error: err.message}));
+     .then(results => res.status(200).json({ success: true, data: results }))
+     .catch(err => res.status(500).json({success: false, message: err.message}));
 };
 
 /**
@@ -40,11 +40,11 @@ export const getByCandidateId = (req, res) => {
     userDAO.getByCandidateId(id)
       .then(result => {
         if (!result) {
-          return res.status(404).json({ message: 'Candidate not found' });
+          return res.status(404).json({ success: false,message: 'Candidate not found' });
         }
-        res.status(200).json(result);
+        res.status(200).json({ success: true, data: result });
       })
-      .catch(err => res.status(500).json({ error: err.message }));
+      .catch(err => res.status(500).json({ success: false, message: err.message }));
   };
 
 /**
@@ -61,11 +61,11 @@ export const getByCandidateId = (req, res) => {
     userDAO.getByCandidateEmail(email)
       .then(result => {
         if (!result) {
-          return res.status(404).json({ message: `Candidate not found ` });
+          return res.status(404).json({ success: false, message: `Candidate not found ` });
         }
-        res.status(200).json(result);
+        res.status(200).json({ success: true, data: result });
       })
-      .catch(err => res.status(500).json({ error: err.message }));
+      .catch(err => res.status(500).json({ success: false, message: err.message }));
   };
 
 /**
@@ -87,7 +87,7 @@ export const getByCandidateId = (req, res) => {
             !user.text_comment || user.text_comment.trim() === '' ||
             !user.candidate_email || user.candidate_email.trim() === ''
         ) {
-            return res.status(400).json({ error: 'Missing or empty required fields: candidate_firstname, candidate_lastname, candidate_phone_number, and candidate_email are required.' });
+            return res.status(400).json({ success: false,message: 'Missing or empty required fields: candidate_firstname, candidate_lastname, candidate_phone_number, and candidate_email are required.' });
         }
         let result;
         const candidateExists = await userDAO.getByCandidateEmail(user.candidate_email);
@@ -95,15 +95,15 @@ export const getByCandidateId = (req, res) => {
         if(candidateExists){
             // Update the existing candidate
             result = await userDAO.updateCandidateByEmail(user.candidate_email, user);
-            res.status(200).json(result);
+            res.status(200).json({ success: true, data: result });
         }
         else{
             // Insert the new candidate
         result = await userDAO.createCandidate(user);
-        res.status(201).json(result);
+        res.status(201).json({ success: true, data: result });
         }
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ success: false,message: err.message });
     }
 
   };
