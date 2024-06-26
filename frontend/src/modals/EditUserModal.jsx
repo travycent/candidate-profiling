@@ -118,7 +118,7 @@ export default function EditUserModal({show, selectedRow,handleClose}) {
                                 <div className="form-group">
                                     <label htmlFor="form_candidate_phone_number">Phone Number :</label>
                                     <input
-                                    type="tel"
+                                    type="text"
                                     name="candidate_phone_number"
                                     value={candidateData.candidate_phone_number}
                                     onChange={handleChange}

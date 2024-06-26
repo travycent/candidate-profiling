@@ -20,11 +20,15 @@ export const setUserDAO = (dao) => {
  * @param {object} req - The incoming HTTP request object.
  * @param {object} res - The outgoing HTTP response object.
  */
-export const getCandidates = (req,res) =>{
-    userDAO.getCandidates()
-     .then(results => res.status(200).json({ success: true, data: results }))
-     .catch(err => res.status(500).json({success: false, message: err.message}));
+export const getCandidates = async (req, res) => {
+  try {
+      const results = await userDAO.getCandidates();
+      res.status(200).json({ success: true, data: results });
+  } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+  }
 };
+
 
 /**
  * Fetches candidate data based on ID and sends it as a JSON response.
@@ -35,17 +39,21 @@ export const getCandidates = (req,res) =>{
  * @param {object} req - The incoming HTTP request object.
  * @param {object} res - The outgoing HTTP response object.
  */
-export const getByCandidateId = (req, res) => {
-    const { id } = req.params;
-    userDAO.getByCandidateId(id)
-      .then(result => {
-        if (!result) {
-          return res.status(404).json({ success: false,message: 'Candidate not found' });
-        }
-        res.status(200).json({ success: true, data: result });
-      })
-      .catch(err => res.status(500).json({ success: false, message: err.message }));
-  };
+export const getByCandidateId = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const result = await userDAO.getByCandidateId(id);
+      
+      if (!result) {
+          return res.status(404).json({ success: false, message: 'Candidate not found' });
+      }
+      
+      res.status(200).json({ success: true, data: result });
+  } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 
 /**
  * Fetches candidate data based on email and sends it as a JSON response.
@@ -56,17 +64,21 @@ export const getByCandidateId = (req, res) => {
  * @param {object} req - The incoming HTTP request object.
  * @param {object} res - The outgoing HTTP response object.
  */
-  export const getByCandidateEmail = (req, res) => {
-    const { email } = req.params;
-    userDAO.getByCandidateEmail(email)
-      .then(result => {
-        if (!result) {
-          return res.status(404).json({ success: false, message: `Candidate not found ` });
-        }
-        res.status(200).json({ success: true, data: result });
-      })
-      .catch(err => res.status(500).json({ success: false, message: err.message }));
-  };
+export const getByCandidateEmail = async (req, res) => {
+  try {
+      const { email } = req.params;
+      const result = await userDAO.getByCandidateEmail(email);
+      
+      if (!result) {
+          return res.status(404).json({ success: false, message: 'Candidate not found' });
+      }
+      
+      res.status(200).json({ success: true, data: result });
+  } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 
 /**
  * Creates or updates a  user  and sends it as a JSON response.

@@ -98,7 +98,7 @@ export default function AddUserModal ({ show, handleClose }) {
                             <div className="mb-3">
                                 <label htmlFor="candidate_phone_number" className="form-label">Phone Number:</label>
                                 <input
-                                    type="tel"
+                                    type="text"
                                     name="candidate_phone_number"
                                     value={candidate.candidate_phone_number}
                                     onChange={handleChange}

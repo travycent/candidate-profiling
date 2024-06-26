@@ -5,10 +5,6 @@ import viteLogo from '/vite.svg'
 import Navbar from "./components/Navbar";
 import Main from "./components/MainContent";
 import MainContent from './components/MainContent';
-import SimpleComponent from './components/TestComponent.jsx';
-// import EditUser from "./components/EditUser";
-// import AddUser from "./components/AddUser";
-// import Profile from "./components/Profile";
 
 function App() {
  

@@ -5,8 +5,11 @@ import { setUserDAO } from './controllers/candidateController.js';
 import MySQLUserDAO from './dao/mysqlUserDao.js';
 import cors from 'cors';
 // import cache from "express-cache-memory"
+//import dotenv
+
 
 const app = express();
+
 
 //Allow usage for Json 
 app.use(express.json());
