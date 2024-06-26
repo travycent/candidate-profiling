@@ -4,7 +4,9 @@
 [[Link to public GitHub repo](https://github.com/travycent/candidate-profiling)]
 
 ## Description
-[This is an Application for recording candidate data]
+
+This application is designed for recording candidate data and is built using Express for the backend, React for the frontend, and MySQL for database management, providing a comprehensive full-stack solution.
+
 
 ## How to Run the Project
 ## Project Environment
