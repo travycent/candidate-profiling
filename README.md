@@ -7,6 +7,11 @@
 [This is an Application for recording candidate data]
 
 ## How to Run the Project
+## Project Environment
+
+- **Tested on:** macOS
+- **Node.js version:** v18.12.1
+- **React App created with:** Vite
 
 ### Backend Setup
 1. **Database Setup:**
